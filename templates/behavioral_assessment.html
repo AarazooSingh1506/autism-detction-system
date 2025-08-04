@@ -1,0 +1,111 @@
+<!-- templates/behavioral_assessment.html -->
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container">
+    <div class="card">
+        <div class="card-header bg-primary text-white">
+            <h2><i class="fas fa-question-circle"></i> Behavioral Assessment</h2>
+        </div>
+        <div class="card-body">
+            <form method="POST">
+                <div class="row mb-4">
+                    <div class="col-md-6">
+                        <h4>Personal Information</h4>
+                        <div class="mb-3">
+                            <label for="age" class="form-label">Child's Age (months)</label>
+                            <input type="number" class="form-control" id="age" name="age" min="12" max="72" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="gender" class="form-label">Gender</label>
+                            <select class="form-select" id="gender" name="gender" required>
+                                <option value="male">Male</option>
+                                <option value="female">Female</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="ethnicity" class="form-label">Ethnicity</label>
+                            <select class="form-select" id="ethnicity" name="ethnicity" required>
+                                <option value="white">White</option>
+                                <option value="black">Black/African American</option>
+                                <option value="asian">Asian</option>
+                                <option value="hispanic">Hispanic/Latino</option>
+                                <option value="middle_eastern">Middle Eastern</option>
+                                <option value="mixed">Mixed Race</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <h4>Medical History</h4>
+                        <div class="mb-3">
+                            <label for="jaundice" class="form-label">Born with Jaundice?</label>
+                            <select class="form-select" id="jaundice" name="jaundice" required>
+                                <option value="yes">Yes</option>
+                                <option value="no">No</option>
+                                <option value="unknown">Unknown</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="autism_family" class="form-label">Family member with ASD?</label>
+                            <select class="form-select" id="autism_family" name="autism_family" required>
+                                <option value="yes">Yes</option>
+                                <option value="no">No</option>
+                                <option value="unknown">Unknown</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <hr>
+                
+                <h4 class="mb-4">Screening Questions</h4>
+                <p>For each question, please select the most appropriate answer:</p>
+                
+                {% for i in range(1, 11) %}
+                <div class="assessment-question mb-4">
+                    <p class="fw-bold">Question {{ i }}: {{ questions[i-1] }}</p>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="a{{ i }}" id="a{{ i }}_0" value="0" required>
+                        <label class="form-check-label" for="a{{ i }}_0">
+                            Never
+                        </label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="a{{ i }}" id="a{{ i }}_1" value="1">
+                        <label class="form-check-label" for="a{{ i }}_1">
+                            Rarely
+                        </label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="a{{ i }}" id="a{{ i }}_2" value="2">
+                        <label class="form-check-label" for="a{{ i }}_2">
+                            Sometimes
+                        </label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="a{{ i }}" id="a{{ i }}_3" value="3">
+                        <label class="form-check-label" for="a{{ i }}_3">
+                            Often
+                        </label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="a{{ i }}" id="a{{ i }}_4" value="4">
+                        <label class="form-check-label" for="a{{ i }}_4">
+                            Always
+                        </label>
+                    </div>
+                </div>
+                {% endfor %}
+                
+                <div class="d-grid mt-4">
+                    <button type="submit" class="btn btn-primary btn-lg">
+                        <i class="fas fa-arrow-right"></i> Continue to Eye Tracking
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

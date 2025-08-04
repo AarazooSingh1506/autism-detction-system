@@ -1,0 +1,155 @@
+<!-- templates/results.html -->
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container">
+    <div class="card">
+        <div class="card-header bg-primary text-white">
+            <h2><i class="fas fa-chart-line"></i> Assessment Results</h2>
+        </div>
+        <div class="card-body">
+            <div class="text-center mb-5">
+                <h3>Autism Spectrum Disorder (ASD) Prediction</h3>
+                <h1 class="display-1">{{ (assessment['prediction'] * 100) | round(2) }}%</h1>
+                
+                <div class="progress mt-3 mb-3 custom-progress-height">
+                    {% set risk_percent = (assessment['prediction'] * 100) | round(2) %}
+                    <div class="progress-bar 
+                        {% if risk_percent > 70 %}bg-danger
+                        {% elif risk_percent > 40 %}bg-warning
+                        {% else %}bg-success{% endif %}
+                        progress-bar-width" 
+                        role="progressbar" 
+                        title="ASD risk: {{ risk_percent }}%">
+                    </div>
+                    </div>
+                </div>
+                
+                <div class="alert 
+                    {% if risk_percent > 70 %}alert-danger
+                    {% elif risk_percent > 40 %}alert-warning
+                    {% else %}alert-success{% endif %}">
+                    {% if risk_percent > 70 %}
+                        <h4><i class="fas fa-exclamation-triangle"></i> High likelihood of ASD</h4>
+                        <p>Consultation with a specialist is strongly recommended.</p>
+                    {% elif risk_percent > 40 %}
+                        <h4><i class="fas fa-exclamation-circle"></i> Moderate likelihood of ASD</h4>
+                        <p>Further evaluation may be beneficial.</p>
+                    {% else %}
+                        <h4><i class="fas fa-check-circle"></i> Low likelihood of ASD</h4>
+                        <p>Continue to monitor development.</p>
+                    {% endif %}
+                </div>
+            </div>
+            
+            <div class="row mt-5">
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-header">
+                            <h4>Behavioral Assessment Summary</h4>
+                        </div>
+                        <div class="card-body">
+                            <table class="table">
+                                <tr>
+                                    <th>Total Score</th>
+                                    <td>{{ assessment['a1'] + assessment['a2'] + assessment['a3'] + assessment['a4'] + assessment['a5'] + assessment['a6'] + assessment['a7'] + assessment['a8'] + assessment['a9'] + assessment['a10'] }}/40</td>
+                                </tr>
+                                <tr>
+                                    <th>Age</th>
+                                    <td>{{ assessment['age'] }} months</td>
+                                </tr>
+                                <tr>
+                                    <th>Gender</th>
+                                    <td>{{ assessment['gender'] }}</td>
+                                </tr>
+                                <tr>
+                                    <th>Ethnicity</th>
+                                    <td>{{ assessment['ethnicity'] }}</td>
+                                </tr>
+                                <tr>
+                                    <th>Jaundice at Birth</th>
+                                    <td>{{ assessment['jaundice'] }}</td>
+                                </tr>
+                                <tr>
+                                    <th>Family History of ASD</th>
+                                    <td>{{ assessment['autism_family'] }}</td>
+                                </tr>
+                                <tr>
+                                    <th>Assessment Date</th>
+                                    <td>{{ assessment['timestamp'] }}</td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-header">
+                            <h4>Eye Tracking Analysis</h4>
+                        </div>
+                        <div class="card-body">
+                            <table class="table">
+                                <tr>
+                                    <th>Fixations</th>
+                                    <td>{{ gaze_pattern['fixations'] }}</td>
+                                </tr>
+                                <tr>
+                                    <th>Saccades</th>
+                                    <td>{{ gaze_pattern['saccades'] }}</td>
+                                </tr>
+                                <tr>
+                                    <th>Pupil Dilation</th>
+                                    <td>{{ gaze_pattern['pupil_dilation'] }} mm</td>
+                                </tr>
+                                <tr>
+                                    <th>Attention to Eyes</th>
+                                    <td>{{ gaze_pattern['attention_areas']['eyes'] }}%</td>
+                                </tr>
+                                <tr>
+                                    <th>Attention to Mouth</th>
+                                    <td>{{ gaze_pattern['attention_areas']['mouth'] }}%</td>
+                                </tr>
+                                <tr>
+                                    <th>Attention to Objects</th>
+                                    <td>{{ gaze_pattern['attention_areas']['objects'] }}%</td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="row mt-4">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <h4>Next Steps</h4>
+                        </div>
+                        <div class="card-body">
+                            <ul>
+                                <li>Share these results with your pediatrician or a developmental specialist</li>
+                                <li>Schedule a comprehensive evaluation if recommended</li>
+                                <li>Explore early intervention resources in your area</li>
+                                <li>Monitor your child's development regularly</li>
+                            </ul>
+                            <p class="mt-3"><strong>Disclaimer:</strong> This assessment is not a diagnostic tool. 
+                            It is designed to help identify potential risk factors for ASD. A formal diagnosis 
+                            should be made by a qualified healthcare professional.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="d-grid gap-2 d-md-flex justify-content-md-end mt-4">
+                <a href="/dashboard" class="btn btn-secondary">
+                    <i class="fas fa-arrow-left"></i> Back to Dashboard
+                </a>
+                <a href="/behavioral-assessment" class="btn btn-primary">
+                    <i class="fas fa-redo"></i> Take Another Assessment
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

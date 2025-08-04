@@ -1,0 +1,148 @@
+<!-- templates/admin/analytics.html -->
+{% extends "admin/base.html" %}
+
+{% block header %}Analytics{% endblock %}
+
+{% block admin_content %}
+<div class="row">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h5>Ethnicity Distribution</h5>
+            </div>
+            <div class="card-body">
+                <canvas id="ethnicityChart" height="300"></canvas>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h5>Jaundice vs. Non-Jaundice</h5>
+            </div>
+            <div class="card-body">
+                <canvas id="jaundiceChart" height="300"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row mt-4">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h5>Family History of ASD</h5>
+            </div>
+            <div class="card-body">
+                <canvas id="familyChart" height="300"></canvas>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h5>Average Behavioral Scores</h5>
+            </div>
+            <div class="card-body">
+                <canvas id="scoresChart" height="300"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Ethnicity distribution chart
+    const ethnicityCtx = document.getElementById('ethnicityChart').getContext('2d');
+    const ethnicityChart = new Chart(ethnicityCtx, {
+        type: 'bar',
+        data: {
+            labels: {{ ethnicities | tojson | safe }},
+            datasets: [{
+                label: 'Number of Assessments',
+                data: {{ ethnicity_counts | tojson | safe }},
+                backgroundColor: 'rgba(153, 102, 255, 0.7)',
+                borderColor: 'rgba(153, 102, 255, 1)',
+                borderWidth: 1
+            }]
+        },
+        options: {
+            indexAxis: 'y',
+            scales: {
+                x: {
+                    beginAtZero: true,
+                    ticks: {
+                        precision: 0
+                    }
+                }
+            }
+        }
+    });
+
+    // Jaundice chart
+    const jaundiceCtx = document.getElementById('jaundiceChart').getContext('2d');
+    const jaundiceChart = new Chart(jaundiceCtx, {
+        type: 'pie',
+        data: {
+            labels: {{ jaundice_labels | tojson | safe }},
+            datasets: [{
+                data: {{ jaundice_counts | tojson | safe }},
+                backgroundColor: [
+                    'rgba(255, 99, 132, 0.7)',
+                    'rgba(54, 162, 235, 0.7)',
+                    'rgba(255, 206, 86, 0.7)'
+                ],
+                borderWidth: 1
+            }]
+        }
+    });
+
+    // Family history chart
+    const familyCtx = document.getElementById('familyChart').getContext('2d');
+    const familyChart = new Chart(familyCtx, {
+        type: 'doughnut',
+        data: {
+            labels: {{ family_labels | tojson | safe }},
+            datasets: [{
+                data: {{ family_counts | tojson | safe }},
+                backgroundColor: [
+                    'rgba(255, 159, 64, 0.7)',
+                    'rgba(75, 192, 192, 0.7)',
+                    'rgba(153, 102, 255, 0.7)'
+                ],
+                borderWidth: 1
+            }]
+        }
+    });
+
+    // Average scores chart
+    const scoresCtx = document.getElementById('scoresChart').getContext('2d');
+    const scoresChart = new Chart(scoresCtx, {
+        type: 'radar',
+        data: {
+            labels: ['A1', 'A2', 'A3', 'A4', 'A5', 'A6', 'A7', 'A8', 'A9', 'A10'],
+            datasets: [{
+                label: 'Average Score',
+                data: {{ avg_scores | tojson | safe }},
+                fill: true,
+                backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                borderColor: 'rgba(75, 192, 192, 1)',
+                pointBackgroundColor: 'rgba(75, 192, 192, 1)',
+                pointBorderColor: '#fff',
+                pointHoverBackgroundColor: '#fff',
+                pointHoverBorderColor: 'rgba(75, 192, 192, 1)'
+            }]
+        },
+        options: {
+            scales: {
+                r: {
+                    min: 0,
+                    max: 4,
+                    ticks: {
+                        stepSize: 1
+                    }
+                }
+            }
+        }
+    });
+</script>
+{% endblock %}

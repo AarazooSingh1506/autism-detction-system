@@ -1,0 +1,60 @@
+<!-- templates/admin/users.html -->
+{% extends "admin/base.html" %}
+
+{% block header %}Users{% endblock %}
+
+{% block admin_content %}
+<div class="card">
+    <div class="card-header">
+        <h5>All Users</h5>
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-striped table-hover">
+                <thead class="table-dark">
+                    <tr>
+                        <th>ID</th>
+                        <th>Username</th>
+                        <th>Role</th>
+                        <th>Joined</th>
+                        <th>Assessments</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for user in users %}
+                    <tr>
+                        <td>{{ user['id'] }}</td>
+                        <td>{{ user['username'] }}</td>
+                        <td>
+                            <span class="badge 
+                                {% if user['role'] == 'admin' %}bg-danger
+                                {% else %}bg-primary{% endif %}">
+                                {{ user['role'] }}
+                            </span>
+                        </td>
+                        <td>{{ user['created_at'] }}</td>
+                        <td>
+                            {% set assessment_count = user['assessment_count'] if 'assessment_count' in user else 0 %}
+                            {{ assessment_count }}
+                        </td>
+                        <td>
+                            {% if user['role'] != 'admin' %}
+                            <div class="btn-group">
+                                <button class="btn btn-sm btn-warning">
+                                    <i class="fas fa-edit"></i> Edit
+                                </button>
+                                <button class="btn btn-sm btn-danger">
+                                    <i class="fas fa-trash"></i> Delete
+                                </button>
+                            </div>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

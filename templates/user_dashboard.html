@@ -1,0 +1,93 @@
+<!-- templates/user_dashboard.html -->
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container">
+    <h1 class="mb-4">Welcome, {{ session.username }}</h1>
+    
+    <div class="row">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h3><i class="fas fa-tasks"></i> Recent Assessments</h3>
+                </div>
+                <div class="card-body">
+                    {% if assessments %}
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Age</th>
+                                    <th>Gender</th>
+                                    <th>Score</th>
+                                    <th>Risk Level</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for assessment in assessments %}
+                                <tr>
+                                    <td>{{ assessment['timestamp'] }}</td>
+                                    <td>{{ assessment['age'] }} months</td>
+                                    <td>{{ assessment['gender'] }}</td>
+                                    <td>{{ assessment['a1'] + assessment['a2'] + assessment['a3'] + assessment['a4'] + assessment['a5'] + assessment['a6'] + assessment['a7'] + assessment['a8'] + assessment['a9'] + assessment['a10'] }}/10</td>
+                                    <td>
+                                        {% set risk = assessment['prediction'] * 100 %}
+                                        {% if risk > 70 %}
+                                        <span class="badge bg-danger">High Risk</span>
+                                        {% elif risk > 40 %}
+                                        <span class="badge bg-warning">Medium Risk</span>
+                                        {% else %}
+                                        <span class="badge bg-success">Low Risk</span>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        <a href="/results?assessment_id={{ assessment['id'] }}" class="btn btn-sm btn-primary">
+                                            <i class="fas fa-eye"></i> View
+                                        </a>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    {% else %}
+                    <div class="alert alert-info">
+                        You haven't completed any assessments yet. Start your first assessment now!
+                    </div>
+                    <a href="/behavioral-assessment" class="btn btn-primary">
+                        <i class="fas fa-plus"></i> Start New Assessment
+                    </a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-header bg-success text-white">
+                    <h3><i class="fas fa-user"></i> Your Profile</h3>
+                </div>
+                <div class="card-body">
+                    <p><strong>Username:</strong> {{ session.username }}</p>
+                    <p><strong>Account Type:</strong> {{ session.role|capitalize }}</p>
+                    <p><strong>Assessments Completed:</strong> {{ assessments|length }}</p>
+                </div>
+            </div>
+            
+            <div class="card mt-4">
+                <div class="card-header bg-info text-white">
+                    <h3><i class="fas fa-plus-circle"></i> Start New Assessment</h3>
+                </div>
+                <div class="card-body">
+                    <p>Complete a new behavioral assessment and eye tracking test to receive an updated risk analysis.</p>
+                    <a href="/behavioral-assessment" class="btn btn-primary w-100">
+                        <i class="fas fa-play"></i> Begin Assessment
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
